@@ -1,5 +1,12 @@
 # Account Takeover (ATO) Checklist
-This is a list of considerations when designing a sophisticated program to deal with account takeover threats. 🐑🐑🐺🐑
+This is a list of considerations when designing a sophisticated program to deal with account takeover threats.
+
+---
+
+🐑🐑🐺🐑🐑
+
+---
+
 
 ## Infrastructure 🛠
 Backend systems we rely on for detection and mitigation.
