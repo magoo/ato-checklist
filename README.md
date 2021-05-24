@@ -16,7 +16,9 @@ Backend systems we rely on for detection and mitigation.
 - [ ] Device Identification (Cookie)
 	- See reference like [AuthTables](https://github.com/magoo/AuthTables)
 - [ ] Browser Fingerprinting (No Cookie)
-- [ ] Device Verification (Email confirmation, SMS, )
+	-  See [AmIUnique](https://amiunique.org/), [Cover Your Tracks](https://coveryourtracks.eff.org/)
+	-  🚨 Do not mix with ads infra 🚨
+- [ ] Device Verification (Email confirmation, SMS, Snail Mail)
 - [ ] Customer Session, Password Reset Workflows (Backend)
 - [ ] Link Shim
 - [ ] Leaked Credential Pipeline (Backend)
@@ -32,11 +34,11 @@ This section describes useful data that often needs to be acquired externally. T
 - [ ] Known Leaked Credentials
 - [ ] Recent Sim Swap
 - [ ] Domain intelligence
-	-  [ ] New domain
+	-  [ ] New domains
 	-  [ ] Disposable 
 	-  [ ] Previously abused
 -  [ ] Address verification
--  [ ] Cellular verification
+-  [ ] Cellular verification (VoIP detection)
 
 ## Product / UX 🎮
 All user facing experiences to help reduce risk within a product.
