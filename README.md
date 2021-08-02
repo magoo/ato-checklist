@@ -74,6 +74,7 @@ All user facing experiences to help reduce risk within a product.
 		- [ ] Email
 		- [ ] Account / Identity Knowledge
 		- [ ] ID Submission	
+		- [ ] CAPTCHA
 
 ## Customer Service ☎️
 Operational customer service interactions (Support tickets). Support organizations often escalate abuse at scale to engineering and have the most visibility into what is, or is not, working.
