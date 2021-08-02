@@ -3,7 +3,7 @@ This is a list of considerations when designing a sophisticated program to deal 
 
 ---
 
-🐑🐑🐺🐑🐑
+🐑🐑🐺🐑
 
 ---
 
@@ -24,9 +24,9 @@ Backend systems we rely on for detection and mitigation.
 - [ ] Leaked Credential Pipeline (Backend)
 	- [ ] Scraping (Pastebin, torrents, etc)
 	- [ ] D a R k W e B and UnDErGroUnD
-	- [ ] Random, high profile dumps
+	- [ ] Periodically accessible dumps
 
-## Threat Intel 🕵️‍♀️
+## ATO Indicators and Features 🕵️‍♀️
 This section describes useful data that often needs to be acquired externally. These can be used in automated classification or to decorate investigation workflows with correlating info. 
 
 - [ ] Known proxies, tor, vps & colocation
@@ -52,7 +52,7 @@ All user facing experiences to help reduce risk within a product.
 	- Allows for warning messages before leaving platform.
 - [ ] Victim and Witness escalation (Report Abuse)
 	- Where victims of ATO report their issue.
-	- Where witnesses of abuse report the impact of ATO.
+	- Where witnesses of abuse report off-platform impact of on-platform ATO.
 - [ ] Forced Password Reset Workflows
 	- [ ] Retroactively ask users to change leaked passwords
 		- Existing customers will have weak passwords.
@@ -65,7 +65,7 @@ All user facing experiences to help reduce risk within a product.
 - [ ] Enforce [password strength](https://github.com/dropbox/zxcvbn) to prevent future weak passwords 
 	- [ ] New Registration
 	- [ ] Password Change
-	- [ ] Leaked / Weak
+	- [ ] Ongoing leaked / Newly weak
 - [ ] Developer console prompts w/ a warning message
 	- Example: [Facebook](https://security.stackexchange.com/questions/158106/facebooks-warning-of-self-xss)
 - [ ] Verification / Challenge workflows
@@ -78,6 +78,8 @@ All user facing experiences to help reduce risk within a product.
 ## Customer Service ☎️
 Operational customer service interactions (Support tickets). Support organizations often escalate abuse at scale to engineering and have the most visibility into what is, or is not, working.
 
+- [ ] Standard Org Language
+	- What counts as ATO?
 - [ ] Metrics / KPI
 	- Tracking abuse going up or down.
 - [ ] IR Escalation
@@ -86,28 +88,30 @@ Operational customer service interactions (Support tickets). Support organizatio
 	- Empowering scalable operations to mitigate abuse scenarios.
 
 ## Investigations & Response 🚑
-You'll have to manually dive into ATO attacks and ask "what is happening?". This section pertains to that perspective of work.
+There will be periodic deep dives into ATO attacks to ask "what happened?". This section pertains to that perspective of work.
 
 - [ ] Authentications are searchable by device, ip, user agent
+	- [ ] Searches can pivot: Device to IP, IP to device, etc.
 	- [ ] Bonus: Actions / Events are searchable
 	- [ ] Bonus: All routes / Endpoints are searchable
 - [ ] Tooling exists to reset bulk accounts that meet criteria
 - [ ] Tooling exists to reverse transactions / changes that meet criteria.
 
 ## Automation 🤖
-Tying everything together for operational ATO systems. Engineering time is the least scalable, customer support is more scalable, automation is the most scalable. 
+Tying everything together for operational ATO systems. Engineering time is the least scalable, customer support hours are more scalable, fully automated systems are the most scalable.
 
-- [ ] Customer service classifies abuse cases[ ] 
+- [ ] Customer service classifies abuse cases 
 - [ ] AI systems classifies authentication events
-- [ ] Suspicious cases push customers to re-verify
-- [ ] XFN meetings to improve anti-abuse systematically
+- [ ] Suspicious cases push customers to verify activity
+- [ ] XFN meetings between groups to improve anti-abuse systematically
 
 ## Anti-Phishing 🎣
 Raising the bar against trivial credential stealing attacks which cause the most problems for unprepared organizations.
 
 - [ ] SPF / DMARC / DKIM 
-- [ ] Brand Protection (Internet scanning for your brand being spoofed)
-- [ ] spoofed@ and phish reporting
-- [ ] App Store Takedowns
+- [ ] Brand protection (Internet scanning for your brand being spoofed)
+- [ ] spoofed@ and customer phish reporting
+- [ ] App store hunting
 - [ ] Domain / ISP Takedowns
-- [ ] Browser Blacklisting
+- [ ] Browser blacklisting
+- [ ] Referer, hotlinks, adversary leaks
