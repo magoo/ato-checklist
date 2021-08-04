@@ -1,0 +1,162 @@
+title: (Generic) Account Takeover Threat Model
+
+facts:
+- password: Adversary remotely targets password.
+  from:
+  - reality:
+- pw_reset: Adversary remotely targets password reset mechanism.
+  from:
+  - reality:
+- remote_device: Adversary is remotely targeting the device.
+  from: 
+  - reality:
+- local_device: Adversary is locally targeting the device.
+  from: 
+  - reality:
+- application: Adversary is remotely targeting the application.
+  from: 
+  - reality:
+- internal_tooling: Adversary is remotely targeting internal tooling.
+  from: 
+  - reality:
+- network: Adversary is targeting network infrastructure. (Active MITM)
+  from: 
+  - reality:
+- sms_redirected: Target happens to redirect SMS elsewhere (email)
+  from:
+  - sms_mfa:
+- mfa_enabled: Target has additional authentication options.
+  from: 
+  - password_successful:
+  - host_executable_malware_local:
+  - host_browser_extension_local:
+
+- password_successful: Credential is correct
+  from:
+  - dictionary_attack:
+  - reused_password:
+  - brute_force:
+  - host_executable_remote:
+  - credential_phishing:
+- token_mfa_successful: Credential + token is correct
+  from: 
+  - credential_phishing:
+  - compromised_email:
+  - compromise_carrier:
+- token_mfa_device_successful: Credential + token + device is correct
+  from: 
+  - host_executable_malware_local:
+  - host_rogue_app_local:
+  - session_exposure:
+  - host_browser_extension_local:
+
+- on_device: The attack originates from device.
+  from:
+  - device_confirmation:
+
+mitigations:
+- unique_complex_password: The password is unique, complex, and hard to guess.
+  from:
+  - dictionary_attack:
+  - reused_password:
+  - brute_force:
+
+- device_confirmation: Platform requires reasonable device confirmation (AuthTables)
+  from:
+  - password_successful:
+  - token_mfa_successful:
+
+- session_pinning: Application fails if ip/session doesn't match.
+  from: 
+  - session_weakness:
+
+- sms_mfa: SMS based token required
+  from:
+  - mfa_enabled:
+  - password_successful:
+  
+- totp_mfa: TOTP MFA required (Rotating codes)
+  from:
+  - mfa_enabled:
+- device_mfa: Authentication device required (smart card, yubikey, touchid)
+  from:
+  - mfa_enabled:
+
+
+attacks:
+- compromise_email: Compromise email, lift SMS codes or confirm devices.
+  from: 
+  - sms_redirected:
+  - device_confirmation:
+- social_engineer_support: Convince customer support that you are the proper account owner.
+  from: 
+  - pw_reset:
+- compromised_email: Registration email address is compromised
+  from:
+    - pw_reset:
+- totp_seed: TOTP generation seed compromise
+  from:
+  - totp_mfa:
+- totp_predict: TOTP generation predictable
+  from:
+  - totp_mfa:
+
+- session_weakness: The session can be guessed / predicted. The JWT signature is not checked.
+  from:
+  - application:
+
+- app_weakness: Unknown vulnerabilities allow auth / pw reset mechanisms to misbehave.
+  from:
+  - application:
+
+- dictionary_attack: Adversary attempts common passwords (dictionary, statistical) against the account.
+  from:
+  - password:
+- reused_password: Adversary acquires re-used password from a related breach.
+  from:
+  - password:
+- brute_force: Adversary attempts all passwords.
+  from:
+  - password:
+- host_executable_remote: The target is keylogged. (Passwords exfil'd remotely. No device usage.)
+  from:
+  - password:
+- credential_phishing: Target is delivered credential phishing.
+  from:
+  - password:
+  - network:
+- session_exposure: Session information (tokens, cookies, auth headers) are exposed.
+  from: 
+  - network:
+  - app_weakness:
+
+
+- host_executable_malware_local: Target is keylogged (malware) and local browser storage abused.
+  from:
+  - remote_device:
+- host_browser_extension_local: Target is keylogged (browser extension) and local browser storage abused. 
+  from:
+  - remote_device:
+- host_rogue_app_local: Target is using an imposter application. 
+  from:
+  - remote_device:
+- compromise_carrier: A variety of attacks against the carrier infrastructure that redirect a SMS. (Port, SIM Swap, Customer Support Social Engineering, sms-to-email delivery)
+  from:
+  - sms_mfa:
+  - pw_reset:
+
+
+goals:
+- successful_ato: Account is accessed by adversary
+  from:
+  - password_successful:
+  - token_mfa_successful:
+  - on_device:
+  - local_device:
+  - totp_seed:
+  - totp_predict:
+  - session_pinning:
+  - compromised_email:
+  - app_weakness:
+  - token_mfa_device_successful:
+  - social_engineer_support:
