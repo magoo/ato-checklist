@@ -3,6 +3,8 @@ This is a list of considerations when designing a sophisticated program to deal 
 
 A [deciduous threat model](https://swagitda.com/deciduous/) is [here](model.yaml) for mitigation planning. 
 
+![A threat model for ATO](model.svg)
+
 ---
 
 🐑🐑🐺🐑
