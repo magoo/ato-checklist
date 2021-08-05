@@ -1,4 +1,4 @@
-title: (Generic) Account Takeover Threat Model
+title: A generic account takeover (ATO) threat model
 
 facts:
 - password: Adversary remotely targets password.
@@ -16,9 +16,6 @@ facts:
 - application: Adversary is remotely targeting the application.
   from: 
   - reality:
-- internal_tooling: Adversary is remotely targeting internal tooling.
-  from: 
-  - reality:
 - network: Adversary is targeting network infrastructure. (Active MITM)
   from: 
   - reality:
@@ -30,20 +27,22 @@ facts:
   - password_successful:
   - host_executable_malware_local:
   - host_browser_extension_local:
+  - compromised_email:
 
-- password_successful: Credential is correct
+- password_successful: Password is correct
   from:
   - dictionary_attack:
   - reused_password:
   - brute_force:
   - host_executable_remote:
   - credential_phishing:
-- token_mfa_successful: Credential + token is correct
+  - password_spray:
+  - compromised_email:
+- token_mfa_successful: Password + token is correct
   from: 
   - credential_phishing:
-  - compromised_email:
   - compromise_carrier:
-- token_mfa_device_successful: Credential + token + device is correct
+- token_mfa_device_successful: Password + token + device is correct
   from: 
   - host_executable_malware_local:
   - host_rogue_app_local:
@@ -55,6 +54,11 @@ facts:
   - device_confirmation:
 
 mitigations:
+- rate_limiting: Rate limited.
+  from: 
+  - brute_force
+  - dictionary_attack
+
 - unique_complex_password: The password is unique, complex, and hard to guess.
   from:
   - dictionary_attack:
@@ -84,6 +88,9 @@ mitigations:
 
 
 attacks:
+- totp_exposed: TOTP Seed is stored locally for convenience, exposed
+  from: 
+    - totp_mfa:
 - compromise_email: Compromise email, lift SMS codes or confirm devices.
   from: 
   - sms_redirected:
@@ -101,13 +108,18 @@ attacks:
   from:
   - totp_mfa:
 
-- session_weakness: The session can be guessed / predicted. The JWT signature is not checked.
+- session_weakness: Insecure session generation. The session can be guessed / predicted. The JWT signature is not checked.
   from:
   - application:
 
 - app_weakness: Unknown vulnerabilities allow auth / pw reset mechanisms to misbehave.
   from:
   - application:
+
+
+- password_spray: Adversary attempts common password across all accounts
+  from:
+  - password:
 
 - dictionary_attack: Adversary attempts common passwords (dictionary, statistical) against the account.
   from:
@@ -131,7 +143,7 @@ attacks:
   - app_weakness:
 
 
-- host_executable_malware_local: Target is keylogged (malware) and local browser storage abused.
+- host_executable_malware_local: Target is software keylogged. Local browser storage lifted.
   from:
   - remote_device:
 - host_browser_extension_local: Target is keylogged (browser extension) and local browser storage abused. 
@@ -160,3 +172,5 @@ goals:
   - app_weakness:
   - token_mfa_device_successful:
   - social_engineer_support:
+  - totp_exposed:
+  - compromise_email:

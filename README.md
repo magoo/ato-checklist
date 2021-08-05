@@ -1,6 +1,8 @@
 # Account Takeover (ATO) Checklist
 This is a list of considerations when designing a sophisticated program to deal with account takeover threats.
 
+A [deciduous threat model](https://swagitda.com/deciduous/) is [here](model.yaml) for mitigation planning. 
+
 ---
 
 🐑🐑🐺🐑
