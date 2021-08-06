@@ -1,4 +1,5 @@
 # Account Takeover (ATO) Threat Model
+An ATO threat model to support the [ATO checklist](README.md)
 
 ---
 
