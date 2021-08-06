@@ -30,7 +30,6 @@ facts:
   - host_executable_malware_local:
   - host_browser_extension_local:
   - compromised_email:
-
 - password_successful: Password is correct
   from:
   - dictionary_attack:
@@ -40,125 +39,153 @@ facts:
   - credential_phishing:
   - password_spray:
   - compromised_email:
-- token_mfa_successful: Password + token is correct
+- token_mfa_successful: Password + Token is correct
   from: 
   - credential_phishing:
   - compromise_carrier:
-- token_mfa_device_successful: Password + token + device is correct
+- token_mfa_device_successful: Password + Token + device is correct
   from: 
   - host_executable_malware_local:
   - host_rogue_app_local:
   - session_exposure:
   - host_browser_extension_local:
-
 - on_device: The attack originates from device.
   from:
   - device_confirmation:
 
 mitigations:
-- rate_limiting: Rate limited.
+- rate_limiting: Attacker is rate limited.
   from: 
   - brute_force
   - dictionary_attack
-
-- unique_complex_password: The password is unique, complex, and hard to guess.
+- unique_complex_password: Attacker cannot obtain a unique and complex password.
   from:
   - dictionary_attack:
   - reused_password:
   - brute_force:
-
-- device_confirmation: Platform requires reasonable device confirmation (AuthTables)
+  links:
+    - https://github.com/dropbox/zxcvbn
+- device_confirmation: Attacker must be able to confirm their malicious device.
   from:
   - password_successful:
   - token_mfa_successful:
-
-- session_pinning: Application fails if ip/session doesn't match.
+  links: 
+  - https://github.com/magoo/AuthTables
+- session_pinning: Attacker must match their network IP to the active session, or meet other network restraints.
   from: 
   - session_weakness:
-
-- sms_mfa: SMS based token required
+  links:
+  - https://attack.mitre.org/mitigations/M1037/
+- sms_mfa: Attacker requires an SMS token.
   from:
   - mfa_enabled:
-  - password_successful:
-  
-- totp_mfa: TOTP MFA required (Rotating codes)
+  - password_successful: 
+- totp_mfa: Attacker requires TOTP.
   from:
   - mfa_enabled:
-- device_mfa: Authentication device required (smart card, yubikey, touchid)
+- device_mfa: Attacker requires a (non-TOTP) hardware authentication device.
   from:
   - mfa_enabled:
-
+  links:
+  - https://webauthn.io/
 
 attacks:
-- totp_exposed: TOTP Seed is stored locally for convenience, exposed
+- totp_exposed: TOTP Seed is stored locally for convenience, is exposed
   from: 
     - totp_mfa:
+  links:
+    - https://news.ycombinator.com/item?id=6325894
 - compromise_email: Compromise email, lift SMS codes or confirm devices.
   from: 
   - sms_redirected:
   - device_confirmation:
+  links: 
+    - https://help.clicksend.com/article/5kown6ixl2-how-to-receive-sms-on-email
+    - https://help.coinbase.com/en/coinbase/getting-started/verify-my-account/device-confirmation-troubleshooting
 - social_engineer_support: Convince customer support that you are the proper account owner.
   from: 
   - pw_reset:
+  links:
+    - https://krebsonsecurity.com/2020/11/godaddy-employees-used-in-attacks-on-multiple-cryptocurrency-services/
 - compromised_email: Registration email address is compromised
   from:
     - pw_reset:
 - totp_seed: TOTP generation seed compromise
   from:
   - totp_mfa:
+  links:
+  - https://arstechnica.com/information-technology/2011/06/rsa-finally-comes-clean-securid-is-compromised/
 - totp_predict: TOTP generation predictable
   from:
   - totp_mfa:
-
+  links:
+    - https://www.researchgate.net/publication/340906961_Analysis_of_Vulnerabilities_That_Can_Occur_When_Generating_One-Time_Password
 - session_weakness: Insecure session generation. The session can be guessed / predicted. The JWT signature is not checked.
   from:
   - application:
-
 - app_weakness: Unknown vulnerabilities allow auth / pw reset mechanisms to misbehave.
   from:
   - application:
-
-
+  links:
+    - https://hackerone.com/reports/1175081
 - password_spray: Adversary attempts common password across all accounts
   from:
   - password:
-
+  links: 
+    - https://attack.mitre.org/techniques/T1110/003/
 - dictionary_attack: Adversary attempts common passwords (dictionary, statistical) against the account.
   from:
   - password:
+  links:
+  - https://attack.mitre.org/techniques/T1110/
 - reused_password: Adversary acquires re-used password from a related breach.
   from:
   - password:
 - brute_force: Adversary attempts all passwords.
   from:
   - password:
+  links: 
+    - https://attack.mitre.org/techniques/T1110/001/
 - host_executable_remote: The target is keylogged. (Passwords exfil'd remotely. No device usage.)
   from:
   - password:
-- credential_phishing: Target is delivered credential phishing.
+  links: 
+  - https://attack.mitre.org/techniques/T1056/001/
+- credential_phishing: Target is delivered a credential phish.
   from:
   - password:
   - network:
+  links: 
+  - https://attack.mitre.org/techniques/T1566/
 - session_exposure: Session information (tokens, cookies, auth headers) are exposed.
   from: 
   - network:
   - app_weakness:
-
-
-- host_executable_malware_local: Target is software keylogged. Local browser storage lifted.
+  links:
+  - https://attack.mitre.org/techniques/T1539/
+- host_executable_malware_local: Target is software keylogged, local browser storage lifted and|or proxied.
   from:
   - remote_device:
+  links: 
+  - https://attack.mitre.org/techniques/T1056/001/
+  - https://attack.mitre.org/techniques/T1555/003/
+  - https://attack.mitre.org/techniques/T1090/001/
 - host_browser_extension_local: Target is keylogged (browser extension) and local browser storage abused. 
   from:
   - remote_device:
+  links:
+  - https://github.com/mandatoryprogrammer/CursedChrome
 - host_rogue_app_local: Target is using an imposter application. 
   from:
   - remote_device:
+  links:
+  - https://attack.mitre.org/techniques/T1444/
 - compromise_carrier: A variety of attacks against the carrier infrastructure that redirect a SMS. (Port, SIM Swap, Customer Support Social Engineering, sms-to-email delivery)
   from:
   - sms_mfa:
   - pw_reset:
-
+  links:
+  - https://www.vice.com/en/article/y3g8wb/hacker-got-my-texts-16-dollars-sakari-netnumber
 
 goals:
 - successful_ato: Account is accessed by adversary
