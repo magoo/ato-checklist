@@ -15,5 +15,7 @@
 The output will look something like the below. Within the YAML itself, you'll find some `links:` to support the model. Enjoy! 🎉
 
 
+---
+
 
 ![A threat model for ATO](model.svg)
